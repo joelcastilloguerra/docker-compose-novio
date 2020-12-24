@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-password}
+      - MYSQL_DATABASE=${DB_NAME:-novio_db}
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql:delegated
+
+  php:
+    image: joelcastillo/novio_php
+    user: novio
+
+  web:
+    image: joelcastillo/novio_web
+    ports:
+      - 80:80
+    links:
+      - php
+
+volumes:
+  db:
